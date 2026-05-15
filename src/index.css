@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-lumina-bg: #FBFBF9;
+  --color-lumina-text: #1A1A1A;
+  --color-lumina-border: #E5E5E1;
+  --color-lumina-muted: #70706B;
+  --color-lumina-silver: #A1A19A;
+  --color-lumina-dark: #4A4A45;
+}
+
+@layer base {
+  body {
+    @apply bg-lumina-bg text-lumina-text font-sans antialiased;
+  }
+}
+
+.minimal-card {
+  @apply bg-white border border-lumina-border p-6 transition-all;
+}
+
+.text-italic-serif {
+  @apply font-serif italic;
+}
+
+.label-caps {
+  @apply text-[11px] font-bold uppercase tracking-[0.2em] text-lumina-silver;
+}
+
+.markdown-body {
+  @apply text-lumina-dark leading-relaxed space-y-4;
+}
+
