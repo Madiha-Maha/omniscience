@@ -30,9 +30,9 @@ service cloud.firestore {
 
     // 1. User Profiles
     match /profiles/{userId} {
-      allow get: if isOwner(userId);
-      allow create: if isOwner(userId) && isValidProfile(incoming());
-      allow update: if isOwner(userId) && isValidProfile(incoming()) && (
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidProfile(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidProfile(incoming()) && (
         incoming().diff(existing()).affectedKeys().hasOnly(['name', 'bio'])
       );
 
@@ -41,25 +41,25 @@ service cloud.firestore {
                data.keys().size() == 3 &&
                data.name is string && data.name.size() >= 2 && data.name.size() <= 100 &&
                data.email is string && data.email == request.auth.token.email &&
-               data.bio is string && data.bio.size() <= 500;
+               data.bio is string && data.bio.size() <= 600;
       }
     }
 
     // 2. Saved Posts
     match /saved_posts/{postId} {
       allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
-      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid && isValidId(postId);
       allow create: if isSignedIn() && incoming().userId == request.auth.uid && isValidSavedPost(incoming());
-      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid && isValidId(postId);
 
       function isValidSavedPost(data) {
         return data.keys().hasAll(['userId', 'platform', 'topic', 'copy', 'visuals', 'savedAt', 'id', 'suggestedTime']) &&
                data.userId == request.auth.uid &&
                data.platform is string && data.platform.size() <= 64 &&
                data.topic is string && data.topic.size() <= 256 &&
-               data.copy is string && data.copy.size() <= 2000 &&
-               data.visuals is string && data.visuals.size() <= 1000 &&
-               data.savedAt == request.time;
+               data.copy is string && data.copy.size() <= 3000 &&
+               data.visuals is string && data.visuals.size() <= 2000 &&
+               (data.savedAt == request.time || data.savedAt is timestamp);
       }
     }
   }

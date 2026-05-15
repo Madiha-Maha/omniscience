@@ -25,6 +25,7 @@ import AudienceView from './components/AudienceView';
 import SentimentView from './components/SentimentView';
 import ForecastingView from './components/ForecastingView';
 import ProfileView from './components/ProfileView';
+import SavedIntelView from './components/SavedIntelView';
 
 const PLATFORMS: { id: Platform; name: string; icon: any; color: string }[] = [
   { id: 'instagram', name: 'Instagram', icon: Instagram, color: 'text-pink-500' },
@@ -95,7 +96,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-type ViewType = 'dashboard' | 'audience' | 'sentiment' | 'forecasting' | 'profile';
+type ViewType = 'dashboard' | 'audience' | 'sentiment' | 'forecasting' | 'intel' | 'profile';
 
 function Dashboard() {
   const { user } = useAuth();
@@ -171,6 +172,7 @@ function Dashboard() {
       case 'audience': return <AudienceView notify={notify} />;
       case 'sentiment': return <SentimentView notify={notify} />;
       case 'forecasting': return <ForecastingView notify={notify} />;
+      case 'intel': return <SavedIntelView notify={notify} />;
       case 'profile': return <ProfileView profileData={profileData} setProfileData={setProfileData} notify={notify} />;
       default: return <DashboardView platform={state.selectedPlatform} data={data} notify={notify} />;
     }
@@ -186,7 +188,7 @@ function Dashboard() {
             <span className="text-lumina-silver font-light not-italic ml-1 text-sm tracking-normal group-hover:text-lumina-text transition-colors">v4.</span>
           </Link>
           <div className="hidden md:flex gap-8 text-[13px] font-medium text-lumina-muted uppercase tracking-widest">
-            {['Dashboard', 'Audience', 'Sentiment', 'Forecasting'].map((item) => (
+            {['Dashboard', 'Audience', 'Sentiment', 'Forecasting', 'Intel'].map((item) => (
               <button 
                 key={item} 
                 onClick={() => setCurrentView(item.toLowerCase() as ViewType)}
@@ -195,7 +197,7 @@ function Dashboard() {
                   currentView === item.toLowerCase() ? "text-lumina-text" : "text-lumina-silver/60"
                 )}
               >
-                {item}
+                {item === 'Intel' ? 'Saved Intel' : item}
                 {currentView === item.toLowerCase() && (
                   <motion.div 
                     layoutId="activeTab"
