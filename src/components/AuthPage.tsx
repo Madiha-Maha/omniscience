@@ -1,43 +1,35 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { LogIn, Sparkles, UserPlus, Github } from 'lucide-react';
 import Logo from './Logo';
 
-export default function AuthPage({ mode }: { mode: 'login' | 'register' }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function AuthPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleGoogleSignIn = async () => {
     setLoading(true);
     setError('');
     try {
-      if (mode === 'login') {
-        await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        await createUserWithEmailAndPassword(auth, email, password);
-      }
-      navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
       const provider = new GoogleAuthProvider();
+      // Ensure we use popup as suggested by integration guidelines
       await signInWithPopup(auth, provider);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message);
+      console.error('Google Auth Error:', err);
+      if (err.code === 'auth/operation-not-allowed') {
+        setError('Authentication issue detected. Please check back in a few minutes while we calibrate the system.');
+      } else if (err.code === 'auth/popup-blocked') {
+        setError('Sign-in popup was blocked. Please allow popups for this site.');
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,83 +42,50 @@ export default function AuthPage({ mode }: { mode: 'login' | 'register' }) {
       </div>
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white border border-lumina-border p-10 shadow-[60px_60px_120px_rgba(0,0,0,0.05)]"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-md bg-white border border-lumina-border p-12 shadow-[80px_80px_160px_rgba(0,0,0,0.08)] flex flex-col items-center"
       >
-        <div className="space-y-2 mb-10">
-          <h2 className="text-3xl font-serif italic text-lumina-text flex items-center gap-2">
-            {mode === 'login' ? <LogIn className="w-6 h-6" /> : <UserPlus className="w-6 h-6" />}
-            {mode === 'login' ? 'Welcome Back.' : 'Create Account.'}
+        <div className="space-y-4 mb-12 text-center">
+          <div className="mx-auto w-16 h-16 bg-lumina-text flex items-center justify-center mb-6">
+            <LogIn className="w-6 h-6 text-white" />
+          </div>
+          <h2 className="text-3xl font-serif italic text-lumina-text">
+            Access The Protocol.
           </h2>
-          <p className="text-lumina-muted italic text-sm">Experience the quintessence of digital analysis.</p>
+          <p className="text-lumina-muted italic text-[11px] uppercase tracking-[0.3em]">Neural Identity Required</p>
         </div>
 
-        <form onSubmit={handleAuth} className="space-y-6">
-          <div className="space-y-1">
-            <label className="label-caps !text-[10px]">Credential Identity</label>
-            <input 
-              type="email" 
-              placeholder="Email address"
-              className="w-full bg-lumina-bg border border-lumina-border p-4 text-[13px] italic font-serif focus:outline-none focus:border-lumina-text transition-all"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="label-caps !text-[10px]">Secure Key</label>
-            <input 
-              type="password" 
-              placeholder="Password"
-              className="w-full bg-lumina-bg border border-lumina-border p-4 text-[13px] italic font-serif focus:outline-none focus:border-lumina-text transition-all"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
+        <div className="w-full space-y-6">
           {error && (
-            <p className="text-red-500 text-[11px] font-bold uppercase italic tracking-wider bg-red-50 p-3 border-l-2 border-red-500">
-              Protocol Error: {error}
-            </p>
+            <div className="bg-red-50 border-l-2 border-red-500 p-4 mb-6">
+              <p className="text-red-500 text-[10px] font-bold uppercase italic tracking-wider">
+                System Error: {error}
+              </p>
+            </div>
           )}
 
           <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full bg-lumina-text text-white p-4 text-[12px] font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center gap-2"
-          >
-            {loading ? 'Processing...' : (mode === 'login' ? 'Initiate Session' : 'Establish Profile')}
-          </button>
-        </form>
-
-        <div className="my-10 flex items-center gap-4">
-          <div className="h-[1px] bg-lumina-border flex-1" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-lumina-silver">OR</span>
-          <div className="h-[1px] bg-lumina-border flex-1" />
-        </div>
-
-        <div className="space-y-4">
-          <button 
             onClick={handleGoogleSignIn}
-            className="w-full border border-lumina-border p-4 text-[12px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-lumina-bg transition-all"
+            disabled={loading}
+            className="w-full bg-lumina-text text-white p-5 text-[12px] font-black uppercase tracking-[0.25em] flex items-center justify-center gap-4 hover:opacity-90 transition-all shadow-xl active:scale-[0.98]"
           >
-            <Sparkles className="w-4 h-4" /> Authenticate with Google
+            {loading ? (
+              <span className="animate-pulse">Calibrating...</span>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4" /> 
+                Synchronize via Google
+              </>
+            )}
           </button>
-        </div>
-
-        <div className="mt-10 text-center">
-          <p className="text-[11px] text-lumina-muted font-bold tracking-widest uppercase">
-            {mode === 'login' ? 'First time in OMNISCIENCE?' : 'Already established?'}
-            <Link 
-              to={mode === 'login' ? '/register' : '/login'} 
-              className="ml-2 text-lumina-text border-b border-lumina-text pb-0.5"
-            >
-              {mode === 'login' ? 'Create Profile' : 'Initiate Session'}
-            </Link>
+          
+          <p className="text-[9px] text-lumina-silver text-center italic mt-8 max-w-[240px] mx-auto leading-relaxed">
+            By synchronizing, you agree to the OMNISCIENCE neural data protocols and privacy directives.
           </p>
         </div>
+
+        <div className="mt-12 h-[1px] w-12 bg-lumina-border" />
       </motion.div>
     </div>
   );

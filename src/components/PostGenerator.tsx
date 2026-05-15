@@ -47,6 +47,7 @@ export default function PostGenerator({ platform }: { platform: Platform }) {
 
   const savePost = async (idea: PostIdea) => {
     if (!user) return;
+    const { handleFirestoreError, OperationType } = await import('../lib/firestoreUtils');
     try {
       await addDoc(collection(db, 'saved_posts'), {
         userId: user.uid,
@@ -56,7 +57,7 @@ export default function PostGenerator({ platform }: { platform: Platform }) {
       });
       setSavedIds(prev => new Set(prev).add(idea.id));
     } catch (error) {
-      console.error("Save Post Error:", error);
+      handleFirestoreError(error, OperationType.WRITE, 'saved_posts');
     }
   };
 

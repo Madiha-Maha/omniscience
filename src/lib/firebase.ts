@@ -13,13 +13,15 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 
 // Explicitly initialize auth with persistence to prevent assertion errors
+import { doc, getDocFromServer } from 'firebase/firestore';
+
 export const auth = (() => {
   const existingApps = getApps();
   if (existingApps.length > 0) {
     try {
       return getAuth(existingApps[0]);
     } catch (e) {
-      // Fallback if getAuth fails
+      // Fallback
     }
   }
   
@@ -28,3 +30,12 @@ export const auth = (() => {
     popupRedirectResolver: browserPopupRedirectResolver,
   });
 })();
+
+async function testConnection() {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+  } catch (error) {
+    console.warn("Connection verification failed. Checking system readiness.");
+  }
+}
+testConnection();

@@ -28,6 +28,7 @@ export default function ProfileView({ profileData, setProfileData, notify }: Pro
   const handleSave = async () => {
     if (!user) return;
     setIsSaving(true);
+    const { handleFirestoreError, OperationType } = await import('../lib/firestoreUtils');
     try {
       const { doc, setDoc } = await import('firebase/firestore');
       const { db } = await import('../lib/firebase');
@@ -35,7 +36,7 @@ export default function ProfileView({ profileData, setProfileData, notify }: Pro
       setIsEditing(false);
       notify("Neural identity synchronized with global ledger.");
     } catch (error) {
-      console.error('Error saving profile:', error);
+      handleFirestoreError(error, OperationType.WRITE, `profiles/${user.uid}`);
       notify("Neural sync failed. Integrity check required.");
     } finally {
       setIsSaving(false);

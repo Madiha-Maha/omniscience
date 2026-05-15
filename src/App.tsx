@@ -123,6 +123,7 @@ function Dashboard() {
     
     // Load profile from Firestore
     const loadProfile = async () => {
+      const { handleFirestoreError, OperationType } = await import('./lib/firestoreUtils');
       try {
         const { doc, getDoc } = await import('firebase/firestore');
         const { db } = await import('./lib/firebase');
@@ -140,7 +141,7 @@ function Dashboard() {
           }));
         }
       } catch (error) {
-        console.error('Error loading profile:', error);
+        handleFirestoreError(error, OperationType.GET, `profiles/${user.uid}`);
       }
     };
     
@@ -371,8 +372,8 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<AuthPage mode="login" />} />
-          <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/register" element={<AuthPage />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
