@@ -1,9 +1,25 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiInstance: GoogleGenAI | null = null;
+
+function getAI() {
+  if (!aiInstance) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.warn("GEMINI_API_KEY is missing. AI features will be disabled.");
+      // Return a dummy object or handle gracefully
+      return null;
+    }
+    aiInstance = new GoogleGenAI({ apiKey });
+  }
+  return aiInstance;
+}
 
 export async function getAIInsights(platform: string, metrics: any) {
   try {
+    const ai = getAI();
+    if (!ai) return "AI services are currently unavailable (missing configuration).";
+    
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `You are a high-level social media analyst. Analyze the following data for ${platform}: ${JSON.stringify(metrics)}. 
@@ -23,6 +39,9 @@ export async function getAIInsights(platform: string, metrics: any) {
 
 export async function getTrendingKeywords(platform: string) {
   try {
+    const ai = getAI();
+    if (!ai) return ["Minimalism", "AI Ethics", "Neural Design", "Sustainability", "Veblen Goods", "Etherealism"];
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Identify 6 real-time trending keywords or interests for a high-end social media audience on ${platform}. 
@@ -38,6 +57,9 @@ export async function getTrendingKeywords(platform: string) {
 
 export async function generatePostIdeas(platform: string, interests: string) {
   try {
+    const ai = getAI();
+    if (!ai) return [];
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Generate 3 high-fidelity, viral social media post ideas for ${platform} based on these interests: ${interests}.
