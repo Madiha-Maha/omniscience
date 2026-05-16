@@ -21,13 +21,18 @@ export default function AuthPage() {
       navigate('/dashboard');
     } catch (err: any) {
       console.error('Google Auth Error:', err);
+      
+      let errorMessage = err.message;
+      
       if (err.code === 'auth/operation-not-allowed') {
-        setError('Authentication issue detected. Please check back in a few minutes while we calibrate the system.');
+        errorMessage = 'Authentication issue detected. Please check back in a few minutes while we calibrate the system.';
       } else if (err.code === 'auth/popup-blocked') {
-        setError('Sign-in popup was blocked. Please allow popups for this site.');
-      } else {
-        setError(err.message);
+        errorMessage = 'Sign-in popup was blocked. Please allow popups for this site in your browser settings.';
+      } else if (err.code === 'auth/internal-error' || err.code === 'auth/network-request-failed') {
+        errorMessage = 'Authentication failed. If you are on mobile, please ensure you are not using a private browser and have a stable connection.';
       }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

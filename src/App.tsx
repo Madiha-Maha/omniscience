@@ -26,6 +26,8 @@ import SentimentView from './components/SentimentView';
 import ForecastingView from './components/ForecastingView';
 import ProfileView from './components/ProfileView';
 import SavedIntelView from './components/SavedIntelView';
+import CompetitorAnalysisView from './components/CompetitorAnalysisView';
+import TrendMapView from './components/TrendMapView';
 
 const PLATFORMS: { id: Platform; name: string; icon: any; color: string }[] = [
   { id: 'instagram', name: 'Instagram', icon: Instagram, color: 'text-pink-500' },
@@ -96,7 +98,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-type ViewType = 'dashboard' | 'audience' | 'sentiment' | 'forecasting' | 'intel' | 'profile';
+type ViewType = 'dashboard' | 'audience' | 'sentiment' | 'forecasting' | 'intel' | 'market' | 'trends' | 'profile';
 
 function Dashboard() {
   const { user } = useAuth();
@@ -173,6 +175,8 @@ function Dashboard() {
       case 'sentiment': return <SentimentView notify={notify} />;
       case 'forecasting': return <ForecastingView notify={notify} />;
       case 'intel': return <SavedIntelView notify={notify} />;
+      case 'market': return <CompetitorAnalysisView notify={notify} />;
+      case 'trends': return <TrendMapView notify={notify} />;
       case 'profile': return <ProfileView profileData={profileData} setProfileData={setProfileData} notify={notify} />;
       default: return <DashboardView platform={state.selectedPlatform} data={data} notify={notify} />;
     }
@@ -187,8 +191,8 @@ function Dashboard() {
             OMNISCIENCE
             <span className="text-lumina-silver font-light not-italic ml-1 text-sm tracking-normal group-hover:text-lumina-text transition-colors">v4.</span>
           </Link>
-          <div className="hidden md:flex gap-8 text-[13px] font-medium text-lumina-muted uppercase tracking-widest">
-            {['Dashboard', 'Audience', 'Sentiment', 'Forecasting', 'Intel'].map((item) => (
+          <div className="hidden lg:flex gap-8 text-[13px] font-medium text-lumina-muted uppercase tracking-widest">
+            {['Dashboard', 'Audience', 'Sentiment', 'Forecasting', 'Intel', 'Market', 'Trends'].map((item) => (
               <button 
                 key={item} 
                 onClick={() => setCurrentView(item.toLowerCase() as ViewType)}
@@ -253,6 +257,28 @@ function Dashboard() {
           "fixed inset-y-0 left-0 z-50 md:relative md:flex w-64 border-r border-lumina-border p-6 flex flex-col gap-8 bg-white overflow-y-auto shrink-0 transition-transform duration-300",
           mobileSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}>
+          {/* Mobile Main Nav Section */}
+          <div className="lg:hidden space-y-4 mb-4 border-b border-lumina-border pb-8">
+            <h3 className="label-caps mb-4">Neural Protocol</h3>
+            <div className="flex flex-col gap-2">
+              {['Dashboard', 'Audience', 'Sentiment', 'Forecasting', 'Intel', 'Market', 'Trends'].map((item) => (
+                <button 
+                  key={item} 
+                  onClick={() => {
+                    setCurrentView(item.toLowerCase() as ViewType);
+                    setMobileSidebarOpen(false);
+                  }}
+                  className={cn(
+                    "flex items-center gap-3 w-full p-2.5 rounded-sm text-[11px] font-black uppercase tracking-widest transition-all",
+                    currentView === item.toLowerCase() ? "bg-lumina-text text-white" : "hover:bg-lumina-bg text-lumina-silver"
+                  )}
+                >
+                  {item === 'Intel' ? 'Saved Intel' : item}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div>
             <h3 className="label-caps mb-4">Select Source</h3>
             <div className="mb-4 relative">
