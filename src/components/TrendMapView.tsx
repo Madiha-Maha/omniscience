@@ -17,11 +17,11 @@ export default function TrendMapView({ notify }: { notify: (msg: string) => void
   const [selectedNode, setSelectedNode] = useState(NODES[0]);
 
   return (
-    <div className="space-y-12 pb-20">
-      <header className="flex flex-col md:flex-row justify-between items-end gap-6">
-        <div>
-          <h2 className="text-4xl font-serif font-bold italic text-lumina-text">Geographic <span className="text-lumina-silver">Resonance</span></h2>
-          <p className="text-lumina-muted font-serif italic mt-2 text-lg">Real-time visualization of global narrative propagation.</p>
+    <div className="space-y-8 md:space-y-12 pb-20">
+      <header className="flex flex-col md:flex-row justify-between items-end gap-6 text-left w-full">
+        <div className="w-full">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold italic text-lumina-text leading-tight">Geographic <span className="text-lumina-silver">Resonance</span></h2>
+          <p className="text-lumina-muted font-serif italic mt-2 text-base md:text-lg">Real-time visualization of global narrative propagation.</p>
         </div>
         <div className="flex bg-white border border-lumina-border p-1">
           <button className="px-6 py-2 bg-lumina-text text-white text-[10px] font-black uppercase tracking-widest">Global Grid</button>
@@ -31,7 +31,7 @@ export default function TrendMapView({ notify }: { notify: (msg: string) => void
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Interactive Map Component */}
-        <div className="lg:col-span-2 bg-white border border-lumina-border p-8 min-h-[500px] relative overflow-hidden flex items-center justify-center">
+        <div className="lg:col-span-2 bg-white border border-lumina-border p-4 md:p-8 min-h-[350px] md:min-h-[500px] relative overflow-hidden flex items-center justify-center">
           {/* Grid Background */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ 
             backgroundImage: 'radial-gradient(#000 0.5px, transparent 0.5px)', 

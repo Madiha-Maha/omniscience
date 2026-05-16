@@ -29,7 +29,9 @@ export default function AuthPage() {
       } else if (err.code === 'auth/popup-blocked') {
         errorMessage = 'Sign-in popup was blocked. Please allow popups for this site in your browser settings.';
       } else if (err.code === 'auth/internal-error' || err.code === 'auth/network-request-failed') {
-        errorMessage = 'Authentication failed. If you are on mobile, please ensure you are not using a private browser and have a stable connection.';
+        errorMessage = 'Authentication failed. On mobile, please tap the "Open in new tab" icon (square with arrow) at the top right of the screen to complete synchronization.';
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        errorMessage = 'Authentication was cancelled. Pulse synchronization required to proceed.';
       }
       
       setError(errorMessage);

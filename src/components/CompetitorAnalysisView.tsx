@@ -26,11 +26,11 @@ export default function CompetitorAnalysisView({ notify }: { notify: (msg: strin
   };
 
   return (
-    <div className="space-y-12 pb-20">
-      <header className="flex flex-col md:flex-row justify-between items-end gap-6">
-        <div>
-          <h2 className="text-4xl font-serif font-bold italic text-lumina-text">Market <span className="text-lumina-silver">Intelligence</span></h2>
-          <p className="text-lumina-muted font-serif italic mt-2 text-lg">Detailed adversarial mapping and resonance comparison.</p>
+    <div className="space-y-8 md:space-y-12 pb-20">
+      <header className="flex flex-col md:flex-row justify-between items-end gap-6 text-left w-full">
+        <div className="w-full">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold italic text-lumina-text leading-tight">Market <span className="text-lumina-silver">Intelligence</span></h2>
+          <p className="text-lumina-muted font-serif italic mt-2 text-base md:text-lg">Detailed adversarial mapping and resonance comparison.</p>
         </div>
         <button 
           onClick={addCompetitor}
