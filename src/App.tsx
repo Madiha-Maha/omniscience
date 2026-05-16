@@ -260,20 +260,30 @@ function Dashboard() {
           {/* Mobile Main Nav Section */}
           <div className="lg:hidden space-y-4 mb-4 border-b border-lumina-border pb-8">
             <h3 className="label-caps mb-4">Neural Protocol</h3>
-            <div className="flex flex-col gap-2">
-              {['Dashboard', 'Audience', 'Sentiment', 'Forecasting', 'Intel', 'Market', 'Trends'].map((item) => (
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { id: 'dashboard', label: 'Protocol' },
+                { id: 'audience', label: 'Audience' },
+                { id: 'sentiment', label: 'Sentiment' },
+                { id: 'forecasting', label: 'Forecast' },
+                { id: 'intel', label: 'Intel' },
+                { id: 'market', label: 'Market' },
+                { id: 'trends', label: 'Trends' }
+              ].map((item) => (
                 <button 
-                  key={item} 
+                  key={item.id} 
                   onClick={() => {
-                    setCurrentView(item.toLowerCase() as ViewType);
+                    setCurrentView(item.id as ViewType);
                     setMobileSidebarOpen(false);
                   }}
                   className={cn(
-                    "flex items-center gap-3 w-full p-2.5 rounded-sm text-[11px] font-black uppercase tracking-widest transition-all",
-                    currentView === item.toLowerCase() ? "bg-lumina-text text-white" : "hover:bg-lumina-bg text-lumina-silver"
+                    "flex items-center justify-center text-center p-3 rounded-sm text-[10px] font-black uppercase tracking-widest transition-all border",
+                    currentView === item.id 
+                      ? "bg-lumina-text text-white border-lumina-text" 
+                      : "bg-white text-lumina-muted border-lumina-border hover:border-lumina-text/50"
                   )}
                 >
-                  {item === 'Intel' ? 'Saved Intel' : item}
+                  {item.label}
                 </button>
               ))}
             </div>

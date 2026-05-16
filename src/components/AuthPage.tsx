@@ -11,6 +11,8 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const isIframe = window.self !== window.top;
+
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError('');
@@ -27,9 +29,9 @@ export default function AuthPage() {
       if (err.code === 'auth/operation-not-allowed') {
         errorMessage = 'Authentication issue detected. Please check back in a few minutes while we calibrate the system.';
       } else if (err.code === 'auth/popup-blocked') {
-        errorMessage = 'Sign-in popup was blocked. Please allow popups for this site in your browser settings.';
+        errorMessage = 'Sign-in popup was blocked. Please allow popups for this site or open in a new tab.';
       } else if (err.code === 'auth/internal-error' || err.code === 'auth/network-request-failed') {
-        errorMessage = 'Authentication failed. On mobile, please tap the "Open in new tab" icon (square with arrow) at the top right of the screen to complete synchronization.';
+        errorMessage = 'Authentication inhibited by browser security. Use "Direct Access Mode" below to establish link.';
       } else if (err.code === 'auth/cancelled-popup-request') {
         errorMessage = 'Authentication was cancelled. Pulse synchronization required to proceed.';
       }
@@ -38,6 +40,10 @@ export default function AuthPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const openInNewTab = () => {
+    window.open(window.location.href, '_blank');
   };
 
   return (
@@ -86,6 +92,20 @@ export default function AuthPage() {
               </>
             )}
           </button>
+
+          {isIframe && (
+            <div className="pt-4 border-t border-lumina-border mt-4">
+              <p className="text-[10px] text-lumina-muted text-center italic mb-4">
+                Mobile authentication requires Direct Access Mode.
+              </p>
+              <button 
+                onClick={openInNewTab}
+                className="w-full border-2 border-lumina-text text-lumina-text p-4 text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-lumina-text hover:text-white transition-all shadow-lg"
+              >
+                Establish Direct Access
+              </button>
+            </div>
+          )}
           
           <p className="text-[9px] text-lumina-silver text-center italic mt-8 max-w-[240px] mx-auto leading-relaxed">
             By synchronizing, you agree to the OMNISCIENCE neural data protocols and privacy directives.
