@@ -5,6 +5,7 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { LogIn, Sparkles, UserPlus, Github } from 'lucide-react';
 import Logo from './Logo';
+import { cn } from '../lib/utils';
 
 export default function AuthPage() {
   const [error, setError] = useState('');
@@ -32,6 +33,8 @@ export default function AuthPage() {
         errorMessage = 'Sign-in popup was blocked. Please allow popups for this site or open in a new tab.';
       } else if (err.code === 'auth/internal-error' || err.code === 'auth/network-request-failed') {
         errorMessage = 'Authentication inhibited by browser security. Use "Direct Access Mode" below to establish link.';
+      } else if (err.code === 'auth/unauthorized-domain') {
+        errorMessage = 'This domain is not yet authorized in Firebase. Using Neural Guest Mode is recommended for immediate access.';
       } else if (err.code === 'auth/cancelled-popup-request') {
         errorMessage = 'Authentication was cancelled. Pulse synchronization required to proceed.';
       }
@@ -44,6 +47,11 @@ export default function AuthPage() {
 
   const openInNewTab = () => {
     window.open(window.location.href, '_blank');
+  };
+
+  const handleGuestAccess = () => {
+    sessionStorage.setItem('omniscience_bypass', 'true');
+    navigate('/dashboard');
   };
 
   return (
@@ -93,10 +101,11 @@ export default function AuthPage() {
             )}
           </button>
 
+          {/* Mobile/Iframe specific tools */}
           {isIframe && (
             <div className="pt-4 border-t border-lumina-border mt-4">
               <p className="text-[10px] text-lumina-muted text-center italic mb-4">
-                Mobile authentication requires Direct Access Mode.
+                Full mobile sync requires Direct Access Mode.
               </p>
               <button 
                 onClick={openInNewTab}
@@ -106,6 +115,25 @@ export default function AuthPage() {
               </button>
             </div>
           )}
+
+          {/* Guest Access - Always available as fallback */}
+          <div className={cn("pt-4 border-t border-lumina-border mt-4", !isIframe && !error && "hidden")}>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="h-[1px] flex-1 bg-lumina-border"></div>
+              <span className="text-[8px] font-black uppercase text-lumina-silver tracking-widest whitespace-nowrap">Neural Bypass</span>
+              <div className="h-[1px] flex-1 bg-lumina-border"></div>
+            </div>
+
+            <button 
+              onClick={handleGuestAccess}
+              className="w-full p-4 border-2 border-dashed border-lumina-border text-[10px] font-black uppercase tracking-[0.2em] text-lumina-muted hover:text-lumina-text hover:border-lumina-text transition-all"
+            >
+              Enter as Guest (Local Protocol)
+            </button>
+            <p className="text-[8px] text-lumina-silver text-center italic mt-2">
+              Bypasses cloud sync. Data will reside in local neural buffers only.
+            </p>
+          </div>
           
           <p className="text-[9px] text-lumina-silver text-center italic mt-8 max-w-[240px] mx-auto leading-relaxed">
             By synchronizing, you agree to the OMNISCIENCE neural data protocols and privacy directives.
