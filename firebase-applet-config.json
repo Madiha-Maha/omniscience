@@ -1,10 +1,10 @@
 {
-  "projectId": "gen-lang-client-0085187327",
-  "appId": "1:534188336446:web:2dbb46f8c3eaa0dd13b86f",
-  "apiKey": "AIzaSyBdPI8H2_QXl9w5W2T_Wn9wn27Ote2866s",
-  "authDomain": "gen-lang-client-0085187327.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-f2a41f08-667f-48d5-b7a9-c1a2d44d81a3",
-  "storageBucket": "gen-lang-client-0085187327.firebasestorage.app",
-  "messagingSenderId": "534188336446",
-  "measurementId": ""
+  "projectId": "omniscience-f033f",
+  "appId": "1:553357291987:web:ef70b5aecbdb3af76b3f26",
+  "apiKey": "AIzaSyAuQzkJPsPH7sQ4bvyrb2R7qAv10bvnELU",
+  "authDomain": "omniscience-f033f.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "omniscience-f033f.firebasestorage.app",
+  "messagingSenderId": "553357291987",
+  "measurementId": "G-4ELK6NJ6R9"
 }

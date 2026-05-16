@@ -44,17 +44,17 @@ export default function ProfileView({ profileData, setProfileData, notify }: Pro
   };
 
   return (
-    <div className="space-y-12 pb-20">
-      <header className="flex justify-between items-end">
-        <div>
-          <h2 className="text-4xl font-serif font-bold italic text-lumina-text">Account <span className="text-lumina-silver">Quintessence</span></h2>
-          <p className="text-lumina-muted font-serif italic mt-2 text-lg">Manage your digital identity and neural access tokens.</p>
+    <div className="space-y-8 md:space-y-12 pb-20">
+      <header className="flex flex-col md:flex-row justify-between items-end gap-6 text-left w-full">
+        <div className="w-full">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold italic text-lumina-text leading-tight">Account <span className="text-lumina-silver">Quintessence</span></h2>
+          <p className="text-lumina-muted font-serif italic mt-2 text-base md:text-lg">Manage your digital identity and neural access tokens.</p>
         </div>
         <button 
           onClick={isEditing ? handleSave : () => setIsEditing(true)}
           disabled={isSaving}
           className={cn(
-            "px-8 py-3 bg-lumina-text text-white text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all flex items-center gap-2",
+            "w-full md:w-auto px-8 py-3 bg-lumina-text text-white text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center gap-2",
             isSaving && "opacity-50 cursor-not-allowed"
           )}
         >

@@ -69,11 +69,11 @@ export default function SavedIntelView({ notify }: { notify: (msg: string) => vo
   );
 
   return (
-    <div className="space-y-12 pb-20">
-      <header className="flex flex-col md:flex-row justify-between items-end gap-6">
-        <div>
-          <h2 className="text-4xl font-serif font-bold italic text-lumina-text">Saved <span className="text-lumina-silver">Intel</span></h2>
-          <p className="text-lumina-muted font-serif italic mt-2 text-lg">Your curated repository of synthesized social narratives.</p>
+    <div className="space-y-8 md:space-y-12 pb-20">
+      <header className="flex flex-col md:flex-row justify-between items-end gap-6 text-left w-full">
+        <div className="w-full">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold italic text-lumina-text leading-tight">Saved <span className="text-lumina-silver">Intel</span></h2>
+          <p className="text-lumina-muted font-serif italic mt-2 text-base md:text-lg">Your curated repository of synthesized social narratives.</p>
         </div>
         <div className="w-full md:w-80 relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-lumina-silver" />
