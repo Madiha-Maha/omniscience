@@ -9,7 +9,7 @@ import { db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function PostGenerator({ platform }: { platform: Platform }) {
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const [interests, setInterests] = useState('');
   const [trends, setTrends] = useState<string[]>([]);
   const [ideas, setIdeas] = useState<PostIdea[]>([]);
@@ -47,6 +47,12 @@ export default function PostGenerator({ platform }: { platform: Platform }) {
 
   const savePost = async (idea: PostIdea) => {
     if (!user) return;
+
+    if (isGuest) {
+      setSavedIds(prev => new Set(prev).add(idea.id));
+      return;
+    }
+
     const { handleFirestoreError, OperationType } = await import('../lib/firestoreUtils');
     try {
       await addDoc(collection(db, 'saved_posts'), {

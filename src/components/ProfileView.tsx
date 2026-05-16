@@ -21,13 +21,24 @@ interface ProfileViewProps {
 }
 
 export default function ProfileView({ profileData, setProfileData, notify }: ProfileViewProps) {
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
 
   const handleSave = async () => {
     if (!user) return;
     setIsSaving(true);
+    
+    // Guest Mode: Local only save
+    if (isGuest) {
+      setTimeout(() => {
+        setIsEditing(false);
+        setIsSaving(false);
+        notify("Guest profile synchronized with local neural buffer.");
+      }, 800);
+      return;
+    }
+
     const { handleFirestoreError, OperationType } = await import('../lib/firestoreUtils');
     try {
       const { doc, setDoc } = await import('firebase/firestore');
@@ -165,7 +176,12 @@ export default function ProfileView({ profileData, setProfileData, notify }: Pro
 
           <button 
             onClick={() => {
-              signOut(auth);
+              if (isGuest) {
+                sessionStorage.removeItem('omniscience_bypass');
+                window.location.href = '/login';
+              } else {
+                signOut(auth);
+              }
               notify("Session terminating. Clearing neural cache...");
             }}
             className="w-full mt-6 py-4 bg-red-50 text-red-600 border border-red-100 text-[11px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-red-600 hover:text-white transition-all"

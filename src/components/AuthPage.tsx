@@ -79,9 +79,9 @@ export default function AuthPage() {
 
         <div className="w-full space-y-6">
           {error && (
-            <div className="bg-red-50 border-l-2 border-red-500 p-4 mb-6">
-              <p className="text-red-500 text-[10px] font-bold uppercase italic tracking-wider">
-                System Error: {error}
+            <div className="bg-lumina-bg border border-lumina-border p-4 mb-6">
+              <p className="text-lumina-text text-[10px] font-bold uppercase italic tracking-wider leading-relaxed">
+                Notice: {error.includes('unauthorized-domain') ? 'Primary Node Restricted. Initiating Local Neural Protocol...' : error}
               </p>
             </div>
           )}
@@ -89,51 +89,56 @@ export default function AuthPage() {
           <button 
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="w-full bg-lumina-text text-white p-5 text-[12px] font-black uppercase tracking-[0.25em] flex items-center justify-center gap-4 hover:opacity-90 transition-all shadow-xl active:scale-[0.98]"
+            className={cn(
+              "w-full p-5 text-[12px] font-black uppercase tracking-[0.25em] flex items-center justify-center gap-4 transition-all shadow-xl active:scale-[0.98]",
+              loading ? "bg-lumina-silver text-white cursor-not-allowed" : "bg-lumina-text text-white hover:opacity-90"
+            )}
           >
             {loading ? (
-              <span className="animate-pulse">Calibrating...</span>
+              <span className="animate-pulse">Link Established...</span>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" /> 
-                Synchronize via Google
+                Cloud Sync via Google
               </>
             )}
           </button>
 
-          {/* Mobile/Iframe specific tools */}
-          {isIframe && (
-            <div className="pt-4 border-t border-lumina-border mt-4">
-              <p className="text-[10px] text-lumina-muted text-center italic mb-4">
-                Full mobile sync requires Direct Access Mode.
-              </p>
-              <button 
-                onClick={openInNewTab}
-                className="w-full border-2 border-lumina-text text-lumina-text p-4 text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-lumina-text hover:text-white transition-all shadow-lg"
-              >
-                Establish Direct Access
-              </button>
-            </div>
-          )}
-
-          {/* Guest Access - Always available as fallback */}
-          <div className={cn("pt-4 border-t border-lumina-border mt-4", !isIframe && !error && "hidden")}>
+          {/* Guest Access - Simplified and Reliable */}
+          <div className="pt-4 border-t border-lumina-border mt-4">
             <div className="flex items-center gap-2 mb-4">
               <div className="h-[1px] flex-1 bg-lumina-border"></div>
-              <span className="text-[8px] font-black uppercase text-lumina-silver tracking-widest whitespace-nowrap">Neural Bypass</span>
+              <span className="text-[8px] font-black uppercase text-lumina-silver tracking-widest whitespace-nowrap">Local Link Protocol</span>
               <div className="h-[1px] flex-1 bg-lumina-border"></div>
             </div>
 
             <button 
               onClick={handleGuestAccess}
-              className="w-full p-4 border-2 border-dashed border-lumina-border text-[10px] font-black uppercase tracking-[0.2em] text-lumina-muted hover:text-lumina-text hover:border-lumina-text transition-all"
+              className={cn(
+                "w-full p-4 border-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all",
+                error 
+                  ? "bg-lumina-text text-white border-lumina-text shadow-lg animate-pulse" 
+                  : "border-dashed border-lumina-border text-lumina-muted hover:text-lumina-text hover:border-lumina-text"
+              )}
             >
-              Enter as Guest (Local Protocol)
+              {error ? 'Proceed with Guest Access' : 'Enter as Neural Guest'}
             </button>
             <p className="text-[8px] text-lumina-silver text-center italic mt-2">
-              Bypasses cloud sync. Data will reside in local neural buffers only.
+              Instant access. Neural data persists in local buffer.
             </p>
           </div>
+
+          {/* Mobile/Iframe specific tools if needed */}
+          {isIframe && !error && (
+            <div className="pt-4 border-t border-lumina-border mt-4">
+              <button 
+                onClick={openInNewTab}
+                className="w-full text-lumina-silver p-2 text-[9px] font-black uppercase tracking-widest hover:text-lumina-text transition-all"
+              >
+                Open in Direct View Mode
+              </button>
+            </div>
+          )}
           
           <p className="text-[9px] text-lumina-silver text-center italic mt-8 max-w-[240px] mx-auto leading-relaxed">
             By synchronizing, you agree to the OMNISCIENCE neural data protocols and privacy directives.

@@ -19,7 +19,7 @@ interface SavedPost {
 }
 
 export default function SavedIntelView({ notify }: { notify: (msg: string) => void }) {
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const [posts, setPosts] = useState<SavedPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,6 +27,38 @@ export default function SavedIntelView({ notify }: { notify: (msg: string) => vo
   const fetchPosts = async () => {
     if (!user) return;
     setLoading(true);
+
+    if (isGuest) {
+      setTimeout(() => {
+        setPosts([
+          {
+            id: 'mock-1',
+            docId: 'mock-1',
+            userId: 'guest',
+            platform: 'LinkedIn',
+            topic: 'AI Ethics',
+            copy: 'The synthesis of human creativity and machine precision is not a zero-sum game. It is the birth of an augmented era, where the artisan and the algorithm collaborate in high-fidelity harmony.',
+            visuals: 'Minimalist circuit board design overlapping a Renaissance painting fragment.',
+            suggestedTime: '10:00 AM',
+            savedAt: { toDate: () => new Date() }
+          },
+          {
+            id: 'mock-2',
+            docId: 'mock-2',
+            userId: 'guest',
+            platform: 'Twitter',
+            topic: 'Neural Design',
+            copy: 'Design is no longer just how it looks. It is how it resonates. The neural interface between product and consciousness is the new frontier of user experience. #Omniscience #DesignFuture',
+            visuals: 'Macro lens shot of a drop of mercury on black silk.',
+            suggestedTime: '2:00 PM',
+            savedAt: { toDate: () => new Date(Date.now() - 86400000) }
+          }
+        ]);
+        setLoading(false);
+      }, 500);
+      return;
+    }
+
     const { handleFirestoreError, OperationType } = await import('../lib/firestoreUtils');
     try {
       const q = query(
@@ -52,6 +84,12 @@ export default function SavedIntelView({ notify }: { notify: (msg: string) => vo
   }, [user]);
 
   const handleDelete = async (docId: string) => {
+    if (isGuest) {
+      setPosts(prev => prev.filter(p => p.docId !== docId));
+      notify("Neural node purged from local buffer.");
+      return;
+    }
+
     const { handleFirestoreError, OperationType } = await import('../lib/firestoreUtils');
     try {
       await deleteDoc(doc(db, 'saved_posts', docId));
