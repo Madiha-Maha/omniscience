@@ -10,11 +10,8 @@ export default function LandingPage() {
       <nav className="h-20 flex items-center justify-between px-8 md:px-16 bg-white/50 backdrop-blur-md border-b border-lumina-border sticky top-0 z-50">
         <Logo />
         <div className="flex gap-4">
-          <Link to="/login" className="px-6 py-2 text-[12px] font-bold uppercase tracking-widest text-lumina-muted hover:text-lumina-text transition-colors flex items-center gap-2">
-            <LogIn className="w-4 h-4" /> Login
-          </Link>
-          <Link to="/register" className="bg-lumina-text text-white px-6 py-2 text-[12px] font-bold uppercase tracking-widest rounded-sm hover:opacity-90 transition-opacity flex items-center gap-2">
-            <UserPlus className="w-4 h-4" /> Join Nexus
+          <Link to="/dashboard" className="bg-lumina-text text-white px-6 py-2 text-[12px] font-bold uppercase tracking-widest rounded-sm hover:opacity-90 transition-opacity flex items-center gap-2 shadow-md">
+            <Sparkles className="w-4 h-4 text-green-400" /> Launch Platform
           </Link>
         </div>
       </nav>
@@ -52,12 +49,9 @@ export default function LandingPage() {
             transition={{ delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 pt-4"
           >
-            <Link to="/register" className="bg-lumina-text text-white px-10 py-5 text-[14px] font-bold uppercase tracking-widest rounded-sm hover:translate-y-[-2px] transition-all shadow-2xl flex items-center justify-center gap-3">
-              Commence Experience <ArrowRight className="w-5 h-5" />
+            <Link to="/dashboard" className="bg-lumina-text text-white px-10 py-5 text-[14px] font-bold uppercase tracking-widest rounded-sm hover:translate-y-[-2px] transition-all shadow-2xl flex items-center justify-center gap-3">
+              Launch Intelligence Console <ArrowRight className="w-5 h-5 text-green-400" />
             </Link>
-            <button className="border border-lumina-text px-10 py-5 text-[14px] font-bold uppercase tracking-widest hover:bg-lumina-bg transition-all flex items-center justify-center gap-2">
-              View Lexicon
-            </button>
           </motion.div>
         </div>
 

@@ -1,4 +1,14 @@
-export type Platform = 'instagram' | 'twitter' | 'tiktok' | 'linkedin';
+export type Platform = 
+  | 'instagram' 
+  | 'twitter' 
+  | 'tiktok' 
+  | 'linkedin' 
+  | 'youtube' 
+  | 'threads' 
+  | 'reddit' 
+  | 'pinterest' 
+  | 'facebook' 
+  | 'bluesky';
 
 export interface Metric {
   label: string;

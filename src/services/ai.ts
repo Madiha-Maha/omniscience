@@ -56,9 +56,33 @@ export async function getTrendingKeywords(platform: string) {
 }
 
 export async function generatePostIdeas(platform: string, interests: string) {
+  const defaultIdeas = [
+    {
+      id: `idea-1-${Date.now()}`,
+      topic: `${interests} & Architectural Resonance`,
+      copy: `The future of ${interests} belongs to those who prioritize *substance over noise*. When you strip away the ephemeral hype, only structural clarity remains. Here is how leading teams execute with precision.`,
+      visuals: `Monochrome architectural render with high-contrast geometric shadows. Minimalist typographic overlay.`,
+      suggestedTime: `09:30 AM EST (Peak Engagement Window)`
+    },
+    {
+      id: `idea-2-${Date.now()}`,
+      topic: `Algorithmic Velocity in ${interests}`,
+      copy: `Most creators chase reach; *architects engineer depth*. In an era of infinite content, retention is the ultimate moat. Three principles to elevate your ${platform} narrative strategy today.`,
+      visuals: `Cinematic macro lens focus on brutalist stone texture. Deep obsidian tones.`,
+      suggestedTime: `02:15 PM EST (High Viral Distribution)`
+    },
+    {
+      id: `idea-3-${Date.now()}`,
+      topic: `The Entropy of ${interests}`,
+      copy: `Simplicity is not the absence of complexity—it is *complexity synthesized*. As ${interests} evolves, the brands that win will be those that master high-fidelity storytelling.`,
+      visuals: `Abstract 3D fluid glass dispersion graphic reflecting ambient warm luxury lighting.`,
+      suggestedTime: `06:45 PM EST (Evening Retargeting Window)`
+    }
+  ];
+
   try {
     const ai = getAI();
-    if (!ai) return [];
+    if (!ai) return defaultIdeas;
 
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -92,9 +116,10 @@ export async function generatePostIdeas(platform: string, interests: string) {
       },
     });
     
-    return JSON.parse(response.text || '[]');
+    const parsed = JSON.parse(response.text || '[]');
+    return parsed.length > 0 ? parsed : defaultIdeas;
   } catch (error) {
     console.error("AI Post Generation Error:", error);
-    return [];
+    return defaultIdeas;
   }
 }

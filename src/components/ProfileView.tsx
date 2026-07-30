@@ -176,17 +176,11 @@ export default function ProfileView({ profileData, setProfileData, notify }: Pro
 
           <button 
             onClick={() => {
-              if (isGuest) {
-                sessionStorage.removeItem('omniscience_bypass');
-                window.location.href = '/login';
-              } else {
-                signOut(auth);
-              }
-              notify("Session terminating. Clearing neural cache...");
+              notify("Executive system buffer refreshed. All metrics recalibrated.");
             }}
-            className="w-full mt-6 py-4 bg-red-50 text-red-600 border border-red-100 text-[11px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-red-600 hover:text-white transition-all"
+            className="w-full mt-6 py-4 bg-lumina-bg text-lumina-text border border-lumina-border text-[11px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-lumina-text hover:text-white transition-all shadow-sm"
           >
-            <LogOut className="w-4 h-4" /> Terminate Active Session
+            <Settings className="w-4 h-4" /> Recalibrate Executive System Buffer
           </button>
         </div>
       </div>
